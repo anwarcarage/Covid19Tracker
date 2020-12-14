@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E33FE7B425796677001F190B /* NewCasesAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33FE7B325796677001F190B /* NewCasesAlert.swift */; };
+		E35334602583D2010006A894 /* StatesAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E353345F2583D2010006A894 /* StatesAlert.swift */; };
 		E3747C242576CD9400C7121E /* ThirdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3747C232576CD9400C7121E /* ThirdViewController.swift */; };
 		E3747C262576CDA500C7121E /* FourthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3747C252576CDA500C7121E /* FourthViewController.swift */; };
 		E380BF182575EDA300923398 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E380BF172575EDA300923398 /* AppDelegate.swift */; };
@@ -20,6 +21,7 @@
 		E380BF312575EDA400923398 /* Covid19TrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E380BF302575EDA400923398 /* Covid19TrackerTests.swift */; };
 		E380BF3C2575EDA400923398 /* Covid19TrackerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E380BF3B2575EDA400923398 /* Covid19TrackerUITests.swift */; };
 		E3A9AF4D257A8A2300575C49 /* CountryAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A9AF4C257A8A2300575C49 /* CountryAlert.swift */; };
+		E3D768E22587EB3800F4B5C7 /* TimeAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D768E12587EB3800F4B5C7 /* TimeAlert.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,6 +43,7 @@
 
 /* Begin PBXFileReference section */
 		E33FE7B325796677001F190B /* NewCasesAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCasesAlert.swift; sourceTree = "<group>"; };
+		E353345F2583D2010006A894 /* StatesAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatesAlert.swift; sourceTree = "<group>"; };
 		E3747C232576CD9400C7121E /* ThirdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdViewController.swift; sourceTree = "<group>"; };
 		E3747C252576CDA500C7121E /* FourthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourthViewController.swift; sourceTree = "<group>"; };
 		E380BF142575EDA300923398 /* Covid19Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Covid19Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -59,6 +62,7 @@
 		E380BF3B2575EDA400923398 /* Covid19TrackerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Covid19TrackerUITests.swift; sourceTree = "<group>"; };
 		E380BF3D2575EDA400923398 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E3A9AF4C257A8A2300575C49 /* CountryAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryAlert.swift; sourceTree = "<group>"; };
+		E3D768E12587EB3800F4B5C7 /* TimeAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeAlert.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +121,8 @@
 				E3747C252576CDA500C7121E /* FourthViewController.swift */,
 				E33FE7B325796677001F190B /* NewCasesAlert.swift */,
 				E3A9AF4C257A8A2300575C49 /* CountryAlert.swift */,
+				E353345F2583D2010006A894 /* StatesAlert.swift */,
+				E3D768E12587EB3800F4B5C7 /* TimeAlert.swift */,
 				E380BF1F2575EDA300923398 /* Main.storyboard */,
 				E380BF222575EDA400923398 /* Assets.xcassets */,
 				E380BF242575EDA400923398 /* LaunchScreen.storyboard */,
@@ -275,7 +281,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				E3747C262576CDA500C7121E /* FourthViewController.swift in Sources */,
+				E3D768E22587EB3800F4B5C7 /* TimeAlert.swift in Sources */,
 				E3A9AF4D257A8A2300575C49 /* CountryAlert.swift in Sources */,
+				E35334602583D2010006A894 /* StatesAlert.swift in Sources */,
 				E380BF1E2575EDA300923398 /* SecondViewController.swift in Sources */,
 				E380BF1C2575EDA300923398 /* FirstViewController.swift in Sources */,
 				E3747C242576CD9400C7121E /* ThirdViewController.swift in Sources */,

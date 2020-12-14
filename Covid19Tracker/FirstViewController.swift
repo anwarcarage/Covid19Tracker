@@ -8,18 +8,45 @@
 
 import UIKit
 
-class FirstViewController: UIViewController, Button1Delegate {
+class FirstViewController: UIViewController, Button1Delegate, Button2Delegate, Button3Delegate, Button4Delegate {
     
     let titleLbl = UILabel()
     var selectedCase: CaseType = .newCases
     var selectedCountry: CountryType = .unitedStates
+    var selectedState: StateType = .allRegions
+    var selectedTime: TimeType = .allTime
+    var btn2Array:[String] = ["Brazil", "China", "France", "Germany", "Italy", "India", "Mexico", "Russia", "Spain", "United Kindom", "United States"]
+    var btn3Array:[String] = ["All regions", "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"]
+    var btn4Array:[String] = ["All Time", "1 week", "2 weeks", "30 days"]
     
+    //handles case delegate
     func changeCase(newCase: CaseType) {
         selectedCase = newCase
         
         self.viewDidLoad()
     }
     
+    //handles country delegate
+    func changeCountry(newCountry: CountryType) {
+        selectedCountry = newCountry
+        
+        self.viewDidLoad()
+    }
+    
+    //handles state delegate
+    func changeState(newState: StateType) {
+        selectedState = newState
+        
+        self.viewDidLoad()
+    }
+    
+    func changeTime(newTime: TimeType) {
+      selectedTime = newTime
+        
+        self.viewDidLoad()
+    }
+    
+    //function to make reusable button
     func makeButton(title: String) -> UIButton {
         let button = UIButton()
 
@@ -43,6 +70,7 @@ class FirstViewController: UIViewController, Button1Delegate {
         return button
     }
     
+    //function to add contraints and reduce overall code
     func addViewConstraints(mainView: UIView, subView: UIView, top: CGFloat, left: CGFloat, btm: CGFloat, right: CGFloat) {
         subView.translatesAutoresizingMaskIntoConstraints = false
         subView.topAnchor.constraint(equalTo: mainView.safeAreaLayoutGuide.topAnchor, constant: top).isActive = true
@@ -66,20 +94,44 @@ class FirstViewController: UIViewController, Button1Delegate {
         divider.backgroundColor = .lightGray
         addViewConstraints(mainView: dividerContainer, subView: divider, top: 0, left: 0, btm: 0, right: 0)
 
-        let firstBtn = makeButton(title: updateBtnTitle())
+        let firstBtn = makeButton(title: updateBtn1Title())
         firstBtn.addTarget(self, action: #selector(firstAlert), for: .touchUpInside)
-        let secondBtn = makeButton(title: "United States")
-        let thirdBtn = makeButton(title: "All regions")
-        let fourthBtn = makeButton(title: "All time")
+        let secondBtn = makeButton(title: updateBtn2Title())
+        secondBtn.addTarget(self, action: #selector(secondAlert), for: .touchUpInside)
+        let thirdBtn = makeButton(title: updateBtn3Title())
+        thirdBtn.addTarget(self, action: #selector(thirdAlert), for: .touchUpInside)
+        let fourthBtn = makeButton(title: updateBtn4Title())
+        fourthBtn.addTarget(self, action: #selector(fourthAlert), for: .touchUpInside)
 
-        let buttonStack = UIStackView(arrangedSubviews: [firstBtn, secondBtn, thirdBtn, fourthBtn])
-        buttonStack.axis = .horizontal
-        buttonStack.spacing = 8
-        let buttonContainer = UIScrollView()
-        buttonContainer.addSubview(buttonStack)
-        addViewConstraints(mainView: buttonContainer, subView: buttonStack, top: 8, left: 8, btm: -8, right: -8)
+        func hideButton() -> UIScrollView {
+            if selectedCountry == .unitedStates {
+                let buttonStack = UIStackView(arrangedSubviews: [firstBtn, secondBtn, thirdBtn, fourthBtn])
+                buttonStack.axis = .horizontal
+                buttonStack.spacing = 8
+                let buttonContainer = UIScrollView()
+                buttonContainer.addSubview(buttonStack)
+                buttonStack.translatesAutoresizingMaskIntoConstraints = false
+                buttonStack.topAnchor.constraint(equalTo: buttonContainer.contentLayoutGuide.topAnchor).isActive = true
+                buttonStack.leadingAnchor.constraint(equalTo: buttonContainer.contentLayoutGuide.leadingAnchor).isActive = true
+                buttonStack.bottomAnchor.constraint(equalTo: buttonContainer.contentLayoutGuide.bottomAnchor).isActive = true
+                buttonStack.trailingAnchor.constraint(equalTo: buttonContainer.contentLayoutGuide.trailingAnchor).isActive = true
+                return buttonContainer
+             } else {
+                let buttonStack = UIStackView(arrangedSubviews: [firstBtn, secondBtn, fourthBtn])
+                buttonStack.axis = .horizontal
+                buttonStack.spacing = 8
+                let buttonContainer = UIScrollView()
+                buttonContainer.addSubview(buttonStack)
+                buttonStack.translatesAutoresizingMaskIntoConstraints = false
+                buttonStack.topAnchor.constraint(equalTo: buttonContainer.contentLayoutGuide.topAnchor).isActive = true
+                buttonStack.leadingAnchor.constraint(equalTo: buttonContainer.contentLayoutGuide.leadingAnchor).isActive = true
+                buttonStack.bottomAnchor.constraint(equalTo: buttonContainer.contentLayoutGuide.bottomAnchor).isActive = true
+                buttonStack.trailingAnchor.constraint(equalTo: buttonContainer.contentLayoutGuide.trailingAnchor).isActive = true
+                return buttonContainer
+             }
+        }
         
-        let cardStack = UIStackView(arrangedSubviews: [titleLbl, dividerContainer, buttonContainer, UIView()])
+        let cardStack = UIStackView(arrangedSubviews: [titleLbl, dividerContainer, hideButton(), UIView()])
         cardStack.axis = .vertical
         cardStack.spacing = 8
         let mainContainer = UIView()
@@ -103,18 +155,49 @@ class FirstViewController: UIViewController, Button1Delegate {
         addViewConstraints(mainView: view, subView: mainStack, top: 8, left: 8, btm: -8, right: -8)
     }
     
-    func updateBtnTitle() -> String {
+    //updates button title
+    func updateBtn1Title() -> String {
         var newTitle = String()
         
-        if selectedCase == .newCases {
-            newTitle = "New Cases"
-        } else if selectedCase == .deaths {
-            newTitle = "Deaths"
-        }
+        newTitle = selectedCase == .newCases ? "New Cases" : "Deaths"
         
         return newTitle
     }
     
+    func updateBtn2Title() -> String {
+        var country = String()
+        
+        for i in 0...btn2Array.count {
+            if  i == selectedCountry.rawValue {
+                country = btn2Array[i]
+            }
+        }
+        return country
+    }
+    
+    func updateBtn3Title() -> String {
+        var state = String()
+        
+        for i in 0...btn3Array.count {
+            if  i == selectedState.rawValue {
+                state = btn3Array[i]
+            }
+        }
+        return state
+    }
+    
+    func updateBtn4Title() -> String {
+        var time = String()
+        
+        for i in 0...btn4Array.count {
+            if  i == selectedTime.rawValue {
+                time = btn4Array[i]
+            }
+        }
+        return time
+    }
+    
+    //first button loads the NewCasesAlert UIVIew & identifies delegate
     @objc func firstAlert() {
         let firstAlert = NewCasesAlert(casetype: selectedCase)
         firstAlert.delegate = self
@@ -122,10 +205,28 @@ class FirstViewController: UIViewController, Button1Delegate {
         addViewConstraints(mainView: view, subView: firstAlert, top: 0, left: 0, btm: 0, right: 0)
     }
     
+    //second button loads the CountryAlert UIView & identifies delegate
     @objc func secondAlert() {
         let secondAlert = CountryAlert(countrytype: selectedCountry)
+        secondAlert.delegate = self
         view.addSubview(secondAlert)
         addViewConstraints(mainView: view, subView: secondAlert, top: 0, left: 0, btm: 0, right: 0 )
+    }
+    
+    //third button loads the StateAlert UIView & identifies delegate
+    @objc func thirdAlert() {
+        let thirdAlert = StatesAlert(statetype: selectedState)
+        thirdAlert.delegate = self
+        view.addSubview(thirdAlert)
+        addViewConstraints(mainView: view, subView: thirdAlert, top: 0, left: 0, btm: 0, right: 0 )
+    }
+    
+    //fourth button loads the TimeAlert UIView & identifies delegate
+    @objc func fourthAlert() {
+        let fourthAlert = TimeAlert(timetype: selectedTime)
+        fourthAlert.delegate = self
+        view.addSubview(fourthAlert)
+        addViewConstraints(mainView: view, subView: fourthAlert, top: 0, left: 0, btm: 0, right: 0 )
     }
 }
 

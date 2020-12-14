@@ -1,32 +1,30 @@
 //
-//  NewCasesAlert.swift
+//  TimeConstraint.swift
 //  Covid19Tracker
 //
-//  Created by user162990 on 12/3/20.
+//  Created by user162990 on 12/14/20.
 //  Copyright © 2020 Tim Nanney. All rights reserved.
 //
 
 import Foundation
 import UIKit
 
-enum CaseType: CaseIterable {
-    case newCases
-    case deaths
+enum TimeType: Int, CaseIterable {
+    case allTime, oneWeek, twoWeeks, ThirtyDays
 }
 
 //delegate created to pass up case to FirstViewController
-protocol Button1Delegate: class {
-    func changeCase(newCase: CaseType)
+protocol Button4Delegate: class {
+    func changeTime(newTime: TimeType)
 }
 
-class NewCasesAlert: UIView {
+class TimeAlert: UIView {
     
     let boxView = UIView()
-    let button1 = UIButton()
-    let button2 = UIButton()
-    weak var delegate: Button1Delegate?
+    let firstViewController = FirstViewController()
+    var allButtons = [UIButton]()
+    weak var delegate: Button4Delegate?
     
-    //function to make reusable button
     func makeButton(title: String, isOn: Bool) -> UIButton {
         let button = UIButton()
         button.setTitle(title, for: .normal)
@@ -48,15 +46,15 @@ class NewCasesAlert: UIView {
 
         return button
     }
-
-    init(casetype: CaseType) {
+    
+    init(timetype: TimeType) {
         super.init(frame: .zero)
         
         self.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         self.isOpaque = false
         
         let boxView = UIView()
-        boxView.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        boxView.heightAnchor.constraint(equalToConstant: 120).isActive = true
         boxView.widthAnchor.constraint(equalToConstant: 160).isActive = true
         boxView.backgroundColor = .white
         boxView.layer.cornerRadius = 8
@@ -64,33 +62,37 @@ class NewCasesAlert: UIView {
         boxView.translatesAutoresizingMaskIntoConstraints = false
         boxView.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
         boxView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
-        
-        //isOn is true when the casetype from FirstViewController equals case
-        let button1 = makeButton(title: "New Cases", isOn: casetype == .newCases)
-        button1.addTarget(self, action: #selector(button1Push), for: .touchUpInside)
+       
+        //loops thru countries array. isOn is true when the enum implicit raw value equals the index value of the array
+        //the created button is added to the allButtons array
+        for (index, time) in firstViewController.btn4Array.enumerated() {
+            let button = makeButton(title: time, isOn: timetype.rawValue == index)
+            button.tag = index
+            button.addTarget(self, action: #selector(buttonPush), for: .touchUpInside)
 
-        let button2 = makeButton(title: "Deaths", isOn: casetype == .deaths)
-        button2.addTarget(self, action: #selector(button2Push), for: .touchUpInside)
+            allButtons.append(button)
+        }
         
-        let buttonStack = UIStackView(arrangedSubviews: [button1, button2])
+        let buttonStack = UIStackView(arrangedSubviews: allButtons)
         buttonStack.axis = .vertical
         buttonStack.spacing = 8
+        buttonStack.distribution = .fillEqually
         boxView.addSubview(buttonStack)
         buttonStack.translatesAutoresizingMaskIntoConstraints = false
         buttonStack.leadingAnchor.constraint(equalTo: boxView.leadingAnchor, constant: 16).isActive = true
         buttonStack.centerYAnchor.constraint(equalTo: boxView.centerYAnchor).isActive = true
     }
     
-    @objc func button1Push() {
+    @objc func buttonPush(_ sender: UIButton) {
         self.removeFromSuperview()
-        delegate?.changeCase(newCase: .newCases)
+        //loop by array count. if the button tag matches the array index then assign the case accordingly
+        for i in 0...firstViewController.btn2Array.count {
+            if sender.tag == i {
+                delegate?.changeTime(newTime: TimeType(rawValue: i)!)
+            }
+        }
     }
-    
-    @objc func button2Push() {
-        self.removeFromSuperview()
-        delegate?.changeCase(newCase: .deaths)
-    }
-    
+       
     required init?(coder: NSCoder) {
         fatalError("init(coder:] has not been implemented")
     }
