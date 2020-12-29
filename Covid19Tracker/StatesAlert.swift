@@ -10,11 +10,11 @@ import Foundation
 import UIKit
 
 enum StateType: Int, CaseIterable {
-    case allRegions, alabama, alaska, arizona, arkansas, california, colorado, connecticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa, kansas, kentuckyk, louisiana, maine, maryland, massachusetts, michigan, minnesota, mississippi, missouri, montana, nebraska, nevada, newHampshire, newJersey, newMexico, newYork, northCarolina, northDakota, ohio, oklahoma, oregon, pennsylvania, rhodeIsland, southCarolina, southDakota, tennessee, texas, utah, vermont, virginia, washington, westVirginia, wisconsin, wyoming
+    case allRegions, alabama, alaska, arizona, arkansas, california, colorado, connecticut, delaware, florida, georgia, hawaii, idaho, illinois, indiana, iowa, kansas, kentucky, louisiana, maine, maryland, massachusetts, michigan, minnesota, mississippi, missouri, montana, nebraska, nevada, newHampshire, newJersey, newMexico, newYork, northCarolina, northDakota, ohio, oklahoma, oregon, pennsylvania, rhodeIsland, southCarolina, southDakota, tennessee, texas, utah, vermont, virginia, washington, westVirginia, wisconsin, wyoming
 }
 
 //delegate created to pass up case to FirstViewController
-protocol Button3Delegate: class {
+protocol StatesDelegate: class {
     func changeState(newState: StateType)
 }
 
@@ -23,7 +23,7 @@ class StatesAlert: UIView {
   let boxView = UIView()
     let firstViewController = FirstViewController()
     var allButtons = [UIButton]()
-    weak var delegate: Button3Delegate?
+    weak var delegate: StatesDelegate?
     
     func makeButton(title: String, isOn: Bool) -> UIButton {
         let button = UIButton()
@@ -31,7 +31,6 @@ class StatesAlert: UIView {
         button.setTitleColor(.black, for: .normal)
         button.contentHorizontalAlignment = .left
         button.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        //button.widthAnchor.constraint(equalToConstant: 160).isActive = true
         
         if isOn == true {
             button.setImage(UIImage(named: "checkmark"), for: .normal)

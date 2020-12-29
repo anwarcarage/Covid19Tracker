@@ -8,10 +8,30 @@
 
 import UIKit
 
-class SecondViewController: UIViewController {
+class SecondViewController: UIViewController, CountryDelegate, StatesDelegate {
     
     let titleLbl = UILabel()
+    var selectedCountry: CountryType = .unitedStates
+    var selectedState: StateType = .allRegions
+    var btn2Array:[String] = ["Brazil", "China", "France", "Germany", "Italy", "India", "Mexico", "Russia", "Spain", "United Kindom", "United States"]
+    var btn3Array:[String] = ["All regions", "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"]
+    var btn4Array:[String] = ["All Time", "1 week", "2 weeks", "30 days"]
     
+    //handles country delegate
+    func changeCountry(newCountry: CountryType) {
+        selectedCountry = newCountry
+        
+        self.viewDidLoad()
+    }
+    
+    //handles state delegate
+    func changeState(newState: StateType) {
+        selectedState = newState
+        
+        self.viewDidLoad()
+    }
+    
+    //function to make reusable button
     func makeButton(title: String) -> UIButton {
         let button = UIButton()
 
@@ -43,23 +63,10 @@ class SecondViewController: UIViewController {
         subView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: right).isActive = true
     }
     
-    func textStack(label1Input: String, label2Input: String) -> UIStackView {
-        let label1 = UILabel()
-        let label2 = UILabel()
-        label1.text = label1Input
-        label1.font = .systemFont(ofSize: 16)
-        label2.text = label2Input
-        label2.font = .systemFont(ofSize: 16)
-        let labelStack = UIStackView(arrangedSubviews: [label1, label2])
-        labelStack.axis = .vertical
-        labelStack.spacing = 4
-        
-        return labelStack
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        var pieChart = CasesChart(statepicked: selectedState)
         view.backgroundColor = .white
         
         titleLbl.text = "Cases"
@@ -73,29 +80,49 @@ class SecondViewController: UIViewController {
         addViewConstraints(mainView: dividerContainer, subView: divider, top: 0, left: 0, btm: 0, right: 0)
 
         let firstBtn = makeButton(title: "Total")
-        let secondBtn = makeButton(title: "United States")
-        let thirdBtn = makeButton(title: "All regions")
-
-        let buttonStack = UIStackView(arrangedSubviews: [firstBtn, secondBtn, thirdBtn])
-        buttonStack.axis = .horizontal
-        buttonStack.spacing = 8
-        let buttonContainer = UIScrollView()
-        buttonContainer.addSubview(buttonStack)
-        addViewConstraints(mainView: buttonContainer, subView: buttonStack, top: 8, left: 8, btm: -8, right: -8)
+        let secondBtn = makeButton(title: updateBtn2Title())
+        secondBtn.addTarget(self, action: #selector(secondAlert), for: .touchUpInside)
+        let thirdBtn = makeButton(title: updateBtn3Title())
+        thirdBtn.addTarget(self, action: #selector(thirdAlert), for: .touchUpInside)
         
-        let casesStack = textStack(label1Input: "Cases", label2Input: "100k")
-        let populationStack = textStack(label1Input: "Population", label2Input: "100 Million")
-        let deathsStack = textStack(label1Input: "Deaths", label2Input: "100")
+        //hides region button if any country aside from the United States is selected for button 3
+        func hideButton() -> UIScrollView {
+            if selectedCountry == .unitedStates {
+                let buttonStack = UIStackView(arrangedSubviews: [firstBtn, secondBtn, thirdBtn])
+                buttonStack.axis = .horizontal
+                buttonStack.spacing = 8
+                let buttonContainer = UIScrollView()
+                buttonContainer.addSubview(buttonStack)
+                buttonStack.translatesAutoresizingMaskIntoConstraints = false
+                buttonStack.topAnchor.constraint(equalTo: buttonContainer.contentLayoutGuide.topAnchor).isActive = true
+                buttonStack.leadingAnchor.constraint(equalTo: buttonContainer.contentLayoutGuide.leadingAnchor).isActive = true
+                buttonStack.bottomAnchor.constraint(equalTo: buttonContainer.contentLayoutGuide.bottomAnchor).isActive = true
+                buttonStack.trailingAnchor.constraint(equalTo: buttonContainer.contentLayoutGuide.trailingAnchor).isActive = true
+                return buttonContainer
+             } else {
+                let buttonStack = UIStackView(arrangedSubviews: [firstBtn, secondBtn])
+                buttonStack.axis = .horizontal
+                buttonStack.spacing = 8
+                let buttonContainer = UIScrollView()
+                buttonContainer.addSubview(buttonStack)
+                buttonStack.translatesAutoresizingMaskIntoConstraints = false
+                buttonStack.topAnchor.constraint(equalTo: buttonContainer.contentLayoutGuide.topAnchor).isActive = true
+                buttonStack.leadingAnchor.constraint(equalTo: buttonContainer.contentLayoutGuide.leadingAnchor).isActive = true
+                buttonStack.bottomAnchor.constraint(equalTo: buttonContainer.contentLayoutGuide.bottomAnchor).isActive = true
+                buttonStack.trailingAnchor.constraint(equalTo: buttonContainer.contentLayoutGuide.trailingAnchor).isActive = true
+                return buttonContainer
+             }
+        }
         
-        let infoStack = UIStackView(arrangedSubviews: [casesStack, populationStack, deathsStack])
-        infoStack.axis = .horizontal
-        infoStack.distribution = .equalSpacing
+        let headerStack = UIStackView(arrangedSubviews: [titleLbl, dividerContainer, hideButton()])
+        headerStack.axis = .vertical
+        headerStack.spacing = 8
+        let headerContainer = UIView()
+        headerContainer.addSubview(headerStack)
+        headerContainer.heightAnchor.constraint(equalToConstant: 120).isActive = true
+        addViewConstraints(mainView: headerContainer, subView: headerStack, top: 0, left: 0, btm: 0, right: 0)
         
-        let infoContainer = UIView()
-        infoContainer.addSubview(infoStack)
-        addViewConstraints(mainView: infoContainer, subView: infoStack, top: 8, left: 32, btm: -8, right: -32)
-        
-        let cardStack = UIStackView(arrangedSubviews: [titleLbl, dividerContainer, buttonContainer, infoContainer])
+        let cardStack = UIStackView(arrangedSubviews: [headerContainer, pieChart])
         cardStack.axis = .vertical
         cardStack.spacing = 8
         let mainContainer = UIView()
@@ -109,15 +136,54 @@ class SecondViewController: UIViewController {
         mainContainer.layer.shadowOffset = CGSize(width: 2, height: 2)
         mainContainer.layer.shadowRadius = 2
         mainContainer.layer.shadowOpacity = 1
-        addViewConstraints(mainView: mainContainer, subView: cardStack, top: 8, left: 8, btm: -8, right: -8)
+        addViewConstraints(mainView: mainContainer, subView: cardStack, top: 8, left: 8, btm: 8, right: -8)
         
         let mainStack = UIStackView(arrangedSubviews: [mainContainer, UIView()])
         mainStack.axis = .vertical
         mainStack.addSubview(mainContainer)
         
         view.addSubview(mainStack)
-        addViewConstraints(mainView: view, subView: mainStack, top: 8, left: 8, btm: -8, right: -8)
+        addViewConstraints(mainView: view, subView: mainStack, top: 8, left: 8, btm: 0, right: -8)
+    }
+    
+    //updates button title
+    func updateBtn2Title() -> String {
+        var country = String()
         
+        for i in 0...btn2Array.count {
+            if  i == selectedCountry.rawValue {
+                country = btn2Array[i]
+            }
+        }
+        return country
+    }
+    
+    //updates button title
+    func updateBtn3Title() -> String {
+        var state = String()
+        
+        for i in 0...btn3Array.count {
+            if  i == selectedState.rawValue {
+                state = btn3Array[i]
+            }
+        }
+        return state
+    }
+    
+    //second button loads the CountryAlert UIView & identifies delegate
+    @objc func secondAlert() {
+        let secondAlert = CountryAlert(countrytype: selectedCountry)
+        secondAlert.delegate = self
+        view.addSubview(secondAlert)
+        addViewConstraints(mainView: view, subView: secondAlert, top: 0, left: 0, btm: 0, right: 0 )
+    }
+    
+    //third button loads the StateAlert UIView & identifies delegate
+    @objc func thirdAlert() {
+        let thirdAlert = StatesAlert(statetype: selectedState)
+        thirdAlert.delegate = self
+        view.addSubview(thirdAlert)
+        addViewConstraints(mainView: view, subView: thirdAlert, top: 0, left: 0, btm: 0, right: 0 )
     }
 }
 

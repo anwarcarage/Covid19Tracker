@@ -15,7 +15,7 @@ enum CaseType: CaseIterable {
 }
 
 //delegate created to pass up case to FirstViewController
-protocol Button1Delegate: class {
+protocol NewCasesDelegate: class {
     func changeCase(newCase: CaseType)
 }
 
@@ -24,7 +24,7 @@ class NewCasesAlert: UIView {
     let boxView = UIView()
     let button1 = UIButton()
     let button2 = UIButton()
-    weak var delegate: Button1Delegate?
+    weak var delegate: NewCasesDelegate?
     
     //function to make reusable button
     func makeButton(title: String, isOn: Bool) -> UIButton {

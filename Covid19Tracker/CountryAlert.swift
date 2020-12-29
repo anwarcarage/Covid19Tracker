@@ -14,7 +14,7 @@ enum CountryType: Int, CaseIterable {
 }
 
 //delegate created to pass up case to FirstViewController
-protocol Button2Delegate: class {
+protocol CountryDelegate: class {
     func changeCountry(newCountry: CountryType)
 }
 
@@ -23,7 +23,7 @@ class CountryAlert: UIView {
     let boxView = UIView()
     let firstViewController = FirstViewController()
     var allButtons = [UIButton]()
-    weak var delegate: Button2Delegate?
+    weak var delegate: CountryDelegate?
     
     func makeButton(title: String, isOn: Bool) -> UIButton {
         let button = UIButton()

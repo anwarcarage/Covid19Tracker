@@ -3,12 +3,16 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E33F73A9258BEFA900ED515B /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = E33F73A8258BEFA900ED515B /* Charts */; };
 		E33FE7B425796677001F190B /* NewCasesAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E33FE7B325796677001F190B /* NewCasesAlert.swift */; };
+		E34B1D442591318C005F33C3 /* Cases.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34B1D432591318C005F33C3 /* Cases.swift */; };
+		E34B1D46259133C6005F33C3 /* CasesDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E34B1D45259133C6005F33C3 /* CasesDisplayable.swift */; };
 		E35334602583D2010006A894 /* StatesAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E353345F2583D2010006A894 /* StatesAlert.swift */; };
+		E353ED6F258931D6006C6D67 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = E353ED6E258931D6006C6D67 /* Alamofire */; };
 		E3747C242576CD9400C7121E /* ThirdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3747C232576CD9400C7121E /* ThirdViewController.swift */; };
 		E3747C262576CDA500C7121E /* FourthViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3747C252576CDA500C7121E /* FourthViewController.swift */; };
 		E380BF182575EDA300923398 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E380BF172575EDA300923398 /* AppDelegate.swift */; };
@@ -20,8 +24,16 @@
 		E380BF262575EDA400923398 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E380BF242575EDA400923398 /* LaunchScreen.storyboard */; };
 		E380BF312575EDA400923398 /* Covid19TrackerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E380BF302575EDA400923398 /* Covid19TrackerTests.swift */; };
 		E380BF3C2575EDA400923398 /* Covid19TrackerUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E380BF3B2575EDA400923398 /* Covid19TrackerUITests.swift */; };
+		E384F7B8258D248600CB8C88 /* CasesChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = E384F7B7258D248600CB8C88 /* CasesChart.swift */; };
 		E3A9AF4D257A8A2300575C49 /* CountryAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3A9AF4C257A8A2300575C49 /* CountryAlert.swift */; };
+		E3ACA87725894F4E00493FC5 /* Displayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3ACA87625894F4E00493FC5 /* Displayable.swift */; };
+		E3C0C59A2594F24500035614 /* CasesStates.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C0C5992594F24500035614 /* CasesStates.swift */; };
+		E3C0C59C2594F25600035614 /* StatesDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C0C59B2594F25600035614 /* StatesDisplayable.swift */; };
+		E3CF7152258BDD8D007805E2 /* DailyGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3CF7151258BDD8D007805E2 /* DailyGraph.swift */; };
 		E3D768E22587EB3800F4B5C7 /* TimeAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D768E12587EB3800F4B5C7 /* TimeAlert.swift */; };
+		E3D768E62587FC1B00F4B5C7 /* ApiUrl.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D768E52587FC1B00F4B5C7 /* ApiUrl.swift */; };
+		E3D768E82587FC4500F4B5C7 /* News.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D768E72587FC4500F4B5C7 /* News.swift */; };
+		E3D768EA2587FC6800F4B5C7 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3D768E92587FC6800F4B5C7 /* AppConstants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +55,8 @@
 
 /* Begin PBXFileReference section */
 		E33FE7B325796677001F190B /* NewCasesAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewCasesAlert.swift; sourceTree = "<group>"; };
+		E34B1D432591318C005F33C3 /* Cases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cases.swift; sourceTree = "<group>"; };
+		E34B1D45259133C6005F33C3 /* CasesDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CasesDisplayable.swift; sourceTree = "<group>"; };
 		E353345F2583D2010006A894 /* StatesAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatesAlert.swift; sourceTree = "<group>"; };
 		E3747C232576CD9400C7121E /* ThirdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdViewController.swift; sourceTree = "<group>"; };
 		E3747C252576CDA500C7121E /* FourthViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FourthViewController.swift; sourceTree = "<group>"; };
@@ -61,8 +75,16 @@
 		E380BF372575EDA400923398 /* Covid19TrackerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Covid19TrackerUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E380BF3B2575EDA400923398 /* Covid19TrackerUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Covid19TrackerUITests.swift; sourceTree = "<group>"; };
 		E380BF3D2575EDA400923398 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E384F7B7258D248600CB8C88 /* CasesChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CasesChart.swift; sourceTree = "<group>"; };
 		E3A9AF4C257A8A2300575C49 /* CountryAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountryAlert.swift; sourceTree = "<group>"; };
+		E3ACA87625894F4E00493FC5 /* Displayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Displayable.swift; sourceTree = "<group>"; };
+		E3C0C5992594F24500035614 /* CasesStates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CasesStates.swift; sourceTree = "<group>"; };
+		E3C0C59B2594F25600035614 /* StatesDisplayable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatesDisplayable.swift; sourceTree = "<group>"; };
+		E3CF7151258BDD8D007805E2 /* DailyGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyGraph.swift; sourceTree = "<group>"; };
 		E3D768E12587EB3800F4B5C7 /* TimeAlert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeAlert.swift; sourceTree = "<group>"; };
+		E3D768E52587FC1B00F4B5C7 /* ApiUrl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiUrl.swift; sourceTree = "<group>"; };
+		E3D768E72587FC4500F4B5C7 /* News.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = News.swift; sourceTree = "<group>"; };
+		E3D768E92587FC6800F4B5C7 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +92,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E353ED6F258931D6006C6D67 /* Alamofire in Frameworks */,
+				E33F73A9258BEFA900ED515B /* Charts in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -93,6 +117,8 @@
 		E380BF0B2575EDA300923398 = {
 			isa = PBXGroup;
 			children = (
+				E3D768E42587FC0300F4B5C7 /* API */,
+				E3D768E32587FAC700F4B5C7 /* Networking */,
 				E380BF162575EDA300923398 /* Covid19Tracker */,
 				E380BF2F2575EDA400923398 /* Covid19TrackerTests */,
 				E380BF3A2575EDA400923398 /* Covid19TrackerUITests */,
@@ -113,6 +139,7 @@
 		E380BF162575EDA300923398 /* Covid19Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				E3D768E92587FC6800F4B5C7 /* AppConstants.swift */,
 				E380BF172575EDA300923398 /* AppDelegate.swift */,
 				E380BF192575EDA300923398 /* SceneDelegate.swift */,
 				E380BF1B2575EDA300923398 /* FirstViewController.swift */,
@@ -123,6 +150,8 @@
 				E3A9AF4C257A8A2300575C49 /* CountryAlert.swift */,
 				E353345F2583D2010006A894 /* StatesAlert.swift */,
 				E3D768E12587EB3800F4B5C7 /* TimeAlert.swift */,
+				E3CF7151258BDD8D007805E2 /* DailyGraph.swift */,
+				E384F7B7258D248600CB8C88 /* CasesChart.swift */,
 				E380BF1F2575EDA300923398 /* Main.storyboard */,
 				E380BF222575EDA400923398 /* Assets.xcassets */,
 				E380BF242575EDA400923398 /* LaunchScreen.storyboard */,
@@ -149,6 +178,27 @@
 			path = Covid19TrackerUITests;
 			sourceTree = "<group>";
 		};
+		E3D768E32587FAC700F4B5C7 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				E3D768E72587FC4500F4B5C7 /* News.swift */,
+				E3ACA87625894F4E00493FC5 /* Displayable.swift */,
+				E34B1D432591318C005F33C3 /* Cases.swift */,
+				E34B1D45259133C6005F33C3 /* CasesDisplayable.swift */,
+				E3C0C5992594F24500035614 /* CasesStates.swift */,
+				E3C0C59B2594F25600035614 /* StatesDisplayable.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		E3D768E42587FC0300F4B5C7 /* API */ = {
+			isa = PBXGroup;
+			children = (
+				E3D768E52587FC1B00F4B5C7 /* ApiUrl.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -165,6 +215,10 @@
 			dependencies = (
 			);
 			name = Covid19Tracker;
+			packageProductDependencies = (
+				E353ED6E258931D6006C6D67 /* Alamofire */,
+				E33F73A8258BEFA900ED515B /* Charts */,
+			);
 			productName = Covid19Tracker;
 			productReference = E380BF142575EDA300923398 /* Covid19Tracker.app */;
 			productType = "com.apple.product-type.application";
@@ -237,6 +291,10 @@
 				Base,
 			);
 			mainGroup = E380BF0B2575EDA300923398;
+			packageReferences = (
+				E353ED6D258931D6006C6D67 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				E33F73A7258BEFA900ED515B /* XCRemoteSwiftPackageReference "Charts" */,
+			);
 			productRefGroup = E380BF152575EDA300923398 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -280,15 +338,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E3D768E82587FC4500F4B5C7 /* News.swift in Sources */,
 				E3747C262576CDA500C7121E /* FourthViewController.swift in Sources */,
 				E3D768E22587EB3800F4B5C7 /* TimeAlert.swift in Sources */,
+				E34B1D442591318C005F33C3 /* Cases.swift in Sources */,
 				E3A9AF4D257A8A2300575C49 /* CountryAlert.swift in Sources */,
 				E35334602583D2010006A894 /* StatesAlert.swift in Sources */,
 				E380BF1E2575EDA300923398 /* SecondViewController.swift in Sources */,
 				E380BF1C2575EDA300923398 /* FirstViewController.swift in Sources */,
 				E3747C242576CD9400C7121E /* ThirdViewController.swift in Sources */,
+				E3D768E62587FC1B00F4B5C7 /* ApiUrl.swift in Sources */,
 				E380BF182575EDA300923398 /* AppDelegate.swift in Sources */,
+				E3D768EA2587FC6800F4B5C7 /* AppConstants.swift in Sources */,
 				E380BF1A2575EDA300923398 /* SceneDelegate.swift in Sources */,
+				E384F7B8258D248600CB8C88 /* CasesChart.swift in Sources */,
+				E3CF7152258BDD8D007805E2 /* DailyGraph.swift in Sources */,
+				E3ACA87725894F4E00493FC5 /* Displayable.swift in Sources */,
+				E3C0C59C2594F25600035614 /* StatesDisplayable.swift in Sources */,
+				E34B1D46259133C6005F33C3 /* CasesDisplayable.swift in Sources */,
+				E3C0C59A2594F24500035614 /* CasesStates.swift in Sources */,
 				E33FE7B425796677001F190B /* NewCasesAlert.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -612,6 +680,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E33F73A7258BEFA900ED515B /* XCRemoteSwiftPackageReference "Charts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/danielgindi/Charts.git";
+			requirement = {
+				kind = exactVersion;
+				version = 3.4.0;
+			};
+		};
+		E353ED6D258931D6006C6D67 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.4.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E33F73A8258BEFA900ED515B /* Charts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E33F73A7258BEFA900ED515B /* XCRemoteSwiftPackageReference "Charts" */;
+			productName = Charts;
+		};
+		E353ED6E258931D6006C6D67 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E353ED6D258931D6006C6D67 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E380BF0C2575EDA300923398 /* Project object */;
 }

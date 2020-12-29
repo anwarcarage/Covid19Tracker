@@ -14,7 +14,7 @@ enum TimeType: Int, CaseIterable {
 }
 
 //delegate created to pass up case to FirstViewController
-protocol Button4Delegate: class {
+protocol TimeDelegate: class {
     func changeTime(newTime: TimeType)
 }
 
@@ -23,7 +23,7 @@ class TimeAlert: UIView {
     let boxView = UIView()
     let firstViewController = FirstViewController()
     var allButtons = [UIButton]()
-    weak var delegate: Button4Delegate?
+    weak var delegate: TimeDelegate?
     
     func makeButton(title: String, isOn: Bool) -> UIButton {
         let button = UIButton()

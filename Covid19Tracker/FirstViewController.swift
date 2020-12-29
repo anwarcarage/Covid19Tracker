@@ -7,10 +7,12 @@
 //
 
 import UIKit
+import Charts
 
-class FirstViewController: UIViewController, Button1Delegate, Button2Delegate, Button3Delegate, Button4Delegate {
+class FirstViewController: UIViewController, NewCasesDelegate, CountryDelegate, StatesDelegate, TimeDelegate {
     
     let titleLbl = UILabel()
+    let graph = DailyGraph()
     var selectedCase: CaseType = .newCases
     var selectedCountry: CountryType = .unitedStates
     var selectedState: StateType = .allRegions
@@ -83,6 +85,7 @@ class FirstViewController: UIViewController, Button1Delegate, Button2Delegate, B
         super.viewDidLoad()
         
         view.backgroundColor = .white
+        let width = UIScreen.main.bounds.width - 16
                 
         titleLbl.text = "Daily Statistics"
         titleLbl.font = .systemFont(ofSize: 32)
@@ -103,6 +106,7 @@ class FirstViewController: UIViewController, Button1Delegate, Button2Delegate, B
         let fourthBtn = makeButton(title: updateBtn4Title())
         fourthBtn.addTarget(self, action: #selector(fourthAlert), for: .touchUpInside)
 
+        //hides region button if any country aside from the United States is selected for button 3
         func hideButton() -> UIScrollView {
             if selectedCountry == .unitedStates {
                 let buttonStack = UIStackView(arrangedSubviews: [firstBtn, secondBtn, thirdBtn, fourthBtn])
@@ -131,11 +135,25 @@ class FirstViewController: UIViewController, Button1Delegate, Button2Delegate, B
              }
         }
         
-        let cardStack = UIStackView(arrangedSubviews: [titleLbl, dividerContainer, hideButton(), UIView()])
-        cardStack.axis = .vertical
-        cardStack.spacing = 8
+        let headerStack = UIStackView(arrangedSubviews: [titleLbl, dividerContainer, hideButton()])
+        headerStack.axis = .vertical
+        headerStack.spacing = 8
+        let headerContainer = UIView()
+        headerContainer.addSubview(headerStack)
+        headerContainer.heightAnchor.constraint(equalToConstant: 120).isActive = true
+        addViewConstraints(mainView: headerContainer, subView: headerStack, top: 0, left: 0, btm: 0, right: 0)
+        
+        let bodyContainer = UIView()
+        bodyContainer.addSubview(graph)
+        bodyContainer.heightAnchor.constraint(equalToConstant: width).isActive = true
+        bodyContainer.widthAnchor.constraint(equalToConstant: width).isActive = true
+        addViewConstraints(mainView: bodyContainer, subView: graph, top: 0, left: 0, btm: 0, right: 0)
+        
+        let mainStack = UIStackView(arrangedSubviews: [headerContainer, bodyContainer])
+        mainStack.axis = .vertical
+        mainStack.spacing = 8
         let mainContainer = UIView()
-        mainContainer.addSubview(cardStack)
+        mainContainer.addSubview(mainStack)
         mainContainer.backgroundColor = .white
         mainContainer.heightAnchor.constraint(equalToConstant: 600).isActive = true
         mainContainer.layer.cornerRadius = 12
@@ -145,14 +163,16 @@ class FirstViewController: UIViewController, Button1Delegate, Button2Delegate, B
         mainContainer.layer.shadowOffset = CGSize(width: 2, height: 2)
         mainContainer.layer.shadowRadius = 2
         mainContainer.layer.shadowOpacity = 1
-        addViewConstraints(mainView: mainContainer, subView: cardStack, top: 8, left: 8, btm: -8, right: -8)
+        mainStack.translatesAutoresizingMaskIntoConstraints = false
+        mainStack.topAnchor.constraint(equalTo: mainContainer.safeAreaLayoutGuide.topAnchor, constant: 8).isActive = true
+        mainStack.leadingAnchor.constraint(equalTo: mainContainer.leadingAnchor, constant: 8).isActive = true
+        mainStack.trailingAnchor.constraint(equalTo: mainContainer.trailingAnchor, constant: -8).isActive = true
         
-        let mainStack = UIStackView(arrangedSubviews: [mainContainer, UIView()])
-        mainStack.axis = .vertical
-        mainStack.addSubview(mainContainer)
-        
-        view.addSubview(mainStack)
-        addViewConstraints(mainView: view, subView: mainStack, top: 8, left: 8, btm: -8, right: -8)
+        view.addSubview(mainContainer)
+        mainContainer.translatesAutoresizingMaskIntoConstraints = false
+        mainContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8).isActive = true
+        mainContainer.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8).isActive = true
+        mainContainer.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8).isActive = true
     }
     
     //updates button title
@@ -164,6 +184,7 @@ class FirstViewController: UIViewController, Button1Delegate, Button2Delegate, B
         return newTitle
     }
     
+    //updates button title
     func updateBtn2Title() -> String {
         var country = String()
         
@@ -175,6 +196,7 @@ class FirstViewController: UIViewController, Button1Delegate, Button2Delegate, B
         return country
     }
     
+    //updates button title
     func updateBtn3Title() -> String {
         var state = String()
         
@@ -186,6 +208,7 @@ class FirstViewController: UIViewController, Button1Delegate, Button2Delegate, B
         return state
     }
     
+    //updates button title
     func updateBtn4Title() -> String {
         var time = String()
         

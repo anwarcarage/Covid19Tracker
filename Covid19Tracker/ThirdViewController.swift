@@ -7,33 +7,12 @@
 //
 
 import UIKit
+import Alamofire
 
-class NewsData: NSObject {
-    let newsTitle: String
-    let commentCount: Int
-    let comments: String
-    let timeStamp: String
-
-    init(newsTitle: String,
-        commentCount: Int,
-        comments: String,
-        timeStamp: String) {
-        self.newsTitle = newsTitle
-        self.commentCount = commentCount
-        self.comments = comments
-        self.timeStamp = timeStamp
-    }
-}
 
 class ThirdViewController: UIViewController {
-    
-    let newsFeed: [NewsData] = [
-            NewsData(newsTitle: "Cognitive Distortions of People Who Get Stuff Done [pdf]", commentCount: 43, comments: "comments", timeStamp: "138 points by bleigh0 2 hours ago"),
-            NewsData(newsTitle: "Testing 1 2 3", commentCount: 43, comments: "comments", timeStamp: "138 points by bleigh0 2 hours ago"),
-            NewsData(newsTitle: "Cognitive Distortions of People Who Get Stuff Done [pdf]", commentCount: 43, comments: "comments", timeStamp: "138 points by bleigh0 2 hours ago"),
-            NewsData(newsTitle: "Cognitive Distortions of People Who Get Stuff Done [pdf]", commentCount: 43, comments: "comments", timeStamp: "138 points by bleigh0 2 hours ago"),
-        
-        ]
+            
+    var incomingData: [Displayable] = []
     
     func addViewConstraints(mainView: UIView, subView: UIView, top: CGFloat, left: CGFloat, btm: CGFloat, right: CGFloat) {
         subView.translatesAutoresizingMaskIntoConstraints = false
@@ -49,14 +28,15 @@ class ThirdViewController: UIViewController {
             super.viewDidLoad()
 
             view.backgroundColor = .lightGray
-
-            let width = UIScreen.main.bounds.width - 32
+                        
+            let width = UIScreen.main.bounds.width - 16
+            let height = CGFloat(180)
 
             let flowLayout = UICollectionViewFlowLayout()
-                flowLayout.itemSize = CGSize(width: width, height: 80)
+            flowLayout.itemSize = CGSize(width: width, height: height)
                 flowLayout.scrollDirection = .vertical
-                flowLayout.minimumInteritemSpacing = 0
-                flowLayout.minimumLineSpacing = 0
+                flowLayout.minimumInteritemSpacing = 8
+                flowLayout.minimumLineSpacing = 8
 
             collectionView.setCollectionViewLayout(flowLayout, animated: false)
             
@@ -73,81 +53,101 @@ class ThirdViewController: UIViewController {
 
             navigationItem.title = "News Flash"
 
+            fetchNews()
         }
+}
+
+extension ThirdViewController: UICollectionViewDataSource, UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return  incomingData.count
     }
 
-    extension ThirdViewController: UICollectionViewDataSource, UICollectionViewDelegate {
-        func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-            return newsFeed.count
-        }
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "newsCell", for: indexPath) as? NewsCell
 
-        func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "newsCell", for: indexPath) as? NewsCell
+        let news = incomingData[indexPath.row]
+            cell?.update(
+                newsTitle: news.newsTitle,
+                newsBody: news.newsBody,
+                newsUrlLink: news.newsUrlLink,
+                newsSource: news.newsSource
+        )
+        
+        return cell ?? UICollectionViewCell()
+    }
+}
 
-            let news = newsFeed[indexPath.row]
-                cell?.update(
-                    newsTitle: news.newsTitle,
-                    commentCount: news.commentCount,
-                    comment: news.comments,
-                    timeStamp: news.timeStamp
-            )
-
-            return cell ?? UICollectionViewCell()
+extension ThirdViewController {
+    func fetchNews() {
+        //1
+        let request = AF.request("https://api.nytimes.com/svc/search/v2/articlesearch.json?q=covid&api-key=pJsm5mxpGLIB56qiURRNGATpYOQnKylK")
+        //2
+        request.responseDecodable(of: News.self) { (response) in
+            guard let news = response.value else { return }
+            self.incomingData = news.response.docs
+            self.collectionView.reloadData()
         }
     }
+}
 
-    class NewsCell: UICollectionViewCell {
-        
-        func addViewConstraints(mainView: UIView, subView: UIView, top: CGFloat, left: CGFloat, btm: CGFloat, right: CGFloat) {
-            subView.translatesAutoresizingMaskIntoConstraints = false
-            subView.topAnchor.constraint(equalTo: mainView.safeAreaLayoutGuide.topAnchor, constant: top).isActive = true
-            subView.leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: left).isActive = true
-            subView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor, constant: btm).isActive = true
-            subView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: right).isActive = true
-        }
-        
-       let cellTitle = UILabel()
-       let cellCommentCount = UILabel()
-       let cellComment = UILabel()
-       let cellTimeStamp = UILabel()
+class NewsCell: UICollectionViewCell {
+    
+    func addViewConstraints(mainView: UIView, subView: UIView, top: CGFloat, left: CGFloat, btm: CGFloat, right: CGFloat) {
+        subView.translatesAutoresizingMaskIntoConstraints = false
+        subView.topAnchor.constraint(equalTo: mainView.safeAreaLayoutGuide.topAnchor, constant: top).isActive = true
+        subView.leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: left).isActive = true
+        subView.bottomAnchor.constraint(equalTo: mainView.bottomAnchor, constant: btm).isActive = true
+        subView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: right).isActive = true
+    }
+    
+    let cellTitle = UILabel()
+    let cellBody = UILabel()
+    var cellLink = String()
+    let cellSource = UILabel()
 
-        override init(frame: CGRect) {
-            super.init(frame: frame)
-            
-            let titlestack = UIStackView(arrangedSubviews: [cellTitle, cellTimeStamp])
-            titlestack.axis = .vertical
-            titlestack.spacing = 4
-            
-            let commentstack = UIStackView(arrangedSubviews: [cellCommentCount, cellComment])
-            commentstack.axis = .vertical
-            commentstack.spacing = 4
-            commentstack.translatesAutoresizingMaskIntoConstraints = false
-            commentstack.widthAnchor.constraint(equalToConstant: 100).isActive = true
-            
-            let hstack = UIStackView(arrangedSubviews: [titlestack, commentstack])
-            hstack.axis = .horizontal
-            hstack.spacing = 8
-            hstack.alignment = .center
+    override init(frame: CGRect) {
+        super.init(frame: frame)
         
-            cellTitle.numberOfLines = 3
-            cellTitle.lineBreakMode = .byWordWrapping
-            cellCommentCount.textAlignment = .center
-            cellComment.textAlignment = .center
-            
-            contentView.addSubview(hstack)
-            
-            addViewConstraints(mainView: contentView, subView: hstack, top: 0, left: 8, btm: 0, right: -8)
-            
-        }
+        cellTitle.font = UIFont(name: "PingFang", size: 12)
+        cellTitle.lineBreakMode = .byWordWrapping
+        cellTitle.numberOfLines = 0
+        cellBody.font = UIFont(name: "Baskerville", size: 12)
+        cellBody.lineBreakMode = .byWordWrapping
+        cellBody.numberOfLines = 0
+        let titlestack = UIStackView(arrangedSubviews: [cellTitle, cellBody])
+        titlestack.axis = .vertical
+        titlestack.spacing = 4
+
+        cellSource.font = UIFont(name: "Arial", size: 8)
+        cellSource.textAlignment = .right
+        let footerStack = UIStackView(arrangedSubviews: [UIView(), cellSource])
         
-        required init?(coder aDecoder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
+        let mainStack = UIStackView(arrangedSubviews: [titlestack, UIView(), footerStack])
+        mainStack.axis = .vertical
+        mainStack.spacing = 8
+    
+        contentView.addSubview(mainStack)
+        contentView.backgroundColor = .white
+        contentView.layer.cornerRadius = 12
+        contentView.layer.borderColor = UIColor.black.cgColor
+        contentView.layer.borderWidth = 1
+        contentView.layer.shadowColor = UIColor.black.cgColor
+        contentView.layer.shadowOffset = CGSize(width: 2, height: 2)
+        contentView.layer.shadowRadius = 2
+        contentView.layer.shadowOpacity = 1
         
-        func update(newsTitle: String, commentCount: Int, comment: String, timeStamp: String) {
-            cellTitle.text = String(newsTitle)
-            cellCommentCount.text = String(commentCount)
-            cellComment.text = String(comment)
-            cellTimeStamp.text = String(timeStamp)
-       }
+        addViewConstraints(mainView: contentView, subView: mainStack, top: 8, left: 8, btm: -8, right: -8)
+        
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    func update(newsTitle: String, newsBody: String, newsUrlLink: String, newsSource: String) {
+        cellTitle.text = String(newsTitle)
+        cellBody.text = String(newsBody)
+        cellLink = String(newsUrlLink)
+        cellSource.text = String("source: " + newsSource)
+   }
 }
