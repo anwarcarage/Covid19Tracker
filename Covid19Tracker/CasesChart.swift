@@ -13,16 +13,12 @@ import Alamofire
 
 class CasesChart: UIView, ChartViewDelegate {
     
-    var incomingData: [CasesDisplayable] = []
+    var countryData: CountriesDisplayable?
     var incomingTotal = Int()
     var incomingDeaths = Int()
     var incomingRecovered = Int()
     var incomingPositive = Int()
     var stateData: StatesDisplayable?
-//    var stateTotal = Int()
-//    var stateDeaths = Int()
-//    var stateRecovered = Int()
-//    var statePositive = Int()
     var urlLink = String()
     
     func textStack(label1Input: String, label2Input: String) -> UIStackView {
@@ -54,114 +50,136 @@ class CasesChart: UIView, ChartViewDelegate {
         return chartView
     }()
     
-    init(statepicked: StateType) {
+    init(statepicked: StateType, countrypicked: CountryType) {
         super.init(frame: .zero)
             
         self.backgroundColor = .clear
         
-        switch statepicked {
-        case .allRegions:
-            fetchCases()
-        case .alabama:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/al/current.json")
-        case .alaska:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/ak/current.json")
-        case .arizona:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/az/current.json")
-        case .arkansas:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/ar/current.json")
-        case .california:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/ca/current.json")
-        case .colorado:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/co/current.json")
-        case .connecticut:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/ct/current.json")
-        case .delaware:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/de/current.json")
-        case .florida:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/fl/current.json")
-        case .georgia:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/ga/current.json")
-        case .hawaii:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/hi/current.json")
-        case .idaho:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/id/current.json")
-        case .illinois:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/il/current.json")
-        case .indiana:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/in/current.json")
-        case .iowa:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/ia/current.json")
-        case .kansas:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/ks/current.json")
-        case .kentucky:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/ky/current.json")
-        case .louisiana:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/la/current.json")
-        case .maine:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/me/current.json")
-        case .maryland:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/md/current.json")
-        case .massachusetts:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/ma/current.json")
-        case .michigan:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/mi/current.json")
-        case .minnesota:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/mn/current.json")
-        case .mississippi:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/ms/current.json")
-        case .missouri:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/mo/current.json")
-        case .montana:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/mt/current.json")
-        case .nebraska:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/ne/current.json")
-        case .nevada:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/nv/current.json")
-        case .newHampshire:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/nh/current.json")
-        case .newJersey:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/nj/current.json")
-        case .newMexico:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/nm/current.json")
-        case .newYork:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/ny/current.json")
-        case .northCarolina:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/nc/current.json")
-        case .northDakota:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/nd/current.json")
-        case .ohio:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/oh/current.json")
-        case .oklahoma:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/ok/current.json")
-        case .oregon:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/or/current.json")
-        case .pennsylvania:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/pa/current.json")
-        case .rhodeIsland:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/ri/current.json")
-        case .southCarolina:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/sc/current.json")
-        case .southDakota:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/sd/current.json")
-        case .tennessee:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/tn/current.json")
-        case .texas:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/tx/current.json")
-        case .utah:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/ut/current.json")
-        case .vermont:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/vt/current.json")
-        case .virginia:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/va/current.json")
-        case .washington:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/wa/current.json")
-        case .westVirginia:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/wv/current.json")
-        case .wisconsin:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/wi/current.json")
-        case .wyoming:
-            fetchState(urlLink: "https://api.covidtracking.com/v1/states/wy/current.json")
+        if countrypicked == .unitedStates {
+            switch statepicked {
+            case .allRegions:
+                fetchCases(urlLink: "https://corona-api.com/countries/us")
+            case .alabama:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/al/current.json")
+            case .alaska:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/ak/current.json")
+            case .arizona:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/az/current.json")
+            case .arkansas:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/ar/current.json")
+            case .california:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/ca/current.json")
+            case .colorado:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/co/current.json")
+            case .connecticut:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/ct/current.json")
+            case .delaware:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/de/current.json")
+            case .florida:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/fl/current.json")
+            case .georgia:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/ga/current.json")
+            case .hawaii:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/hi/current.json")
+            case .idaho:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/id/current.json")
+            case .illinois:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/il/current.json")
+            case .indiana:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/in/current.json")
+            case .iowa:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/ia/current.json")
+            case .kansas:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/ks/current.json")
+            case .kentucky:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/ky/current.json")
+            case .louisiana:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/la/current.json")
+            case .maine:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/me/current.json")
+            case .maryland:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/md/current.json")
+            case .massachusetts:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/ma/current.json")
+            case .michigan:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/mi/current.json")
+            case .minnesota:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/mn/current.json")
+            case .mississippi:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/ms/current.json")
+            case .missouri:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/mo/current.json")
+            case .montana:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/mt/current.json")
+            case .nebraska:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/ne/current.json")
+            case .nevada:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/nv/current.json")
+            case .newHampshire:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/nh/current.json")
+            case .newJersey:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/nj/current.json")
+            case .newMexico:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/nm/current.json")
+            case .newYork:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/ny/current.json")
+            case .northCarolina:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/nc/current.json")
+            case .northDakota:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/nd/current.json")
+            case .ohio:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/oh/current.json")
+            case .oklahoma:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/ok/current.json")
+            case .oregon:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/or/current.json")
+            case .pennsylvania:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/pa/current.json")
+            case .rhodeIsland:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/ri/current.json")
+            case .southCarolina:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/sc/current.json")
+            case .southDakota:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/sd/current.json")
+            case .tennessee:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/tn/current.json")
+            case .texas:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/tx/current.json")
+            case .utah:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/ut/current.json")
+            case .vermont:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/vt/current.json")
+            case .virginia:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/va/current.json")
+            case .washington:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/wa/current.json")
+            case .westVirginia:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/wv/current.json")
+            case .wisconsin:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/wi/current.json")
+            case .wyoming:
+                fetchState(urlLink: "https://api.covidtracking.com/v1/states/wy/current.json")
+            }
+        } else if countrypicked == .brazil {
+            fetchCases(urlLink: "https://corona-api.com/countries/br")
+        } else if countrypicked == .china {
+            fetchCases(urlLink: "https://corona-api.com/countries/cn")
+        } else if countrypicked == .france {
+            fetchCases(urlLink: "https://corona-api.com/countries/fr")
+        } else if countrypicked == .germany {
+            fetchCases(urlLink: "https://corona-api.com/countries/de")
+        } else if countrypicked == .india {
+            fetchCases(urlLink: "https://corona-api.com/countries/in")
+        } else if countrypicked == .italy {
+            fetchCases(urlLink: "https://corona-api.com/countries/it")
+        } else if countrypicked == .mexico {
+            fetchCases(urlLink: "https://corona-api.com/countries/mx")
+        } else if countrypicked == .russia {
+            fetchCases(urlLink: "https://corona-api.com/countries/ru")
+        } else if countrypicked == .spain {
+            fetchCases(urlLink: "https://corona-api.com/countries/es")
+        } else if countrypicked == .unitedKingdom {
+            fetchCases(urlLink: "https://corona-api.com/countries/gb")
         }
     }
     
@@ -229,17 +247,17 @@ class CasesChart: UIView, ChartViewDelegate {
 
 extension CasesChart {
     //api call for all regions in the United States
-    func fetchCases() {
+    func fetchCases(urlLink: String) {
         
-        let request = AF.request("https://api.covidtracking.com/v1/us/daily.json")
+        let request = AF.request(urlLink)
         
-        request.responseDecodable(of: [Cases].self) { (response) in
-            guard let cases = response.value else { return }
-            self.incomingData = cases
-            self.incomingTotal = self.incomingData[0].casesTotal
-            self.incomingDeaths = self.incomingData[0].casesDeaths
-            self.incomingRecovered = self.incomingData[0].casesRecovered
-            self.incomingPositive = self.findPositives()
+        request.responseDecodable(of:CaseCountries.self) { (response) in
+            guard let casesCountry = response.value else { return }
+            self.countryData = casesCountry.data.timeline[0]
+            self.incomingTotal = self.countryData?.countryTotal ?? 0
+            self.incomingDeaths = self.countryData?.countryDeaths ?? 0
+            self.incomingRecovered = self.countryData?.countryRecovered ?? 0
+            self.incomingPositive = self.countryData?.countryActive ?? 0
             self.setData(positive: self.incomingPositive, deaths: self.incomingDeaths, recovered: self.incomingRecovered)
             self.addViews()
             self.setNeedsDisplay()
@@ -252,8 +270,8 @@ extension CasesChart {
         let request = AF.request(urlLink)
         
         request.responseDecodable(of: CaseStates.self) { (response) in
-            guard let casesStates = response.value else { return }
-            self.stateData = casesStates
+            guard let casesState = response.value else { return }
+            self.stateData = casesState
             self.incomingTotal = self.stateData?.statesTotal ?? 0
             self.incomingDeaths = self.stateData?.statesDeaths ?? 0
             self.incomingRecovered = self.stateData?.statesRecovered ?? 0

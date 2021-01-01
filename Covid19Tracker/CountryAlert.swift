@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 enum CountryType: Int, CaseIterable {
-    case brazil, china, france, germany, italy, india, mexico, russia, spain, unitedKingdom, unitedStates
+    case brazil, china, france, germany, india, italy, mexico, russia, spain, unitedKingdom, unitedStates
 }
 
 //delegate created to pass up case to FirstViewController

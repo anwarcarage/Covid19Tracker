@@ -12,7 +12,6 @@ import Charts
 class FirstViewController: UIViewController, NewCasesDelegate, CountryDelegate, StatesDelegate, TimeDelegate {
     
     let titleLbl = UILabel()
-    let graph = DailyGraph()
     var selectedCase: CaseType = .newCases
     var selectedCountry: CountryType = .unitedStates
     var selectedState: StateType = .allRegions
@@ -86,7 +85,9 @@ class FirstViewController: UIViewController, NewCasesDelegate, CountryDelegate, 
         
         view.backgroundColor = .white
         let width = UIScreen.main.bounds.width - 16
-                
+         
+        var graph = DailyGraph(statepicked: selectedState, countrypicked: selectedCountry, timepicked: selectedTime)
+        
         titleLbl.text = "Daily Statistics"
         titleLbl.font = .systemFont(ofSize: 32)
                 

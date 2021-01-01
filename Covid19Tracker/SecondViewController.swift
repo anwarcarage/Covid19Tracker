@@ -13,7 +13,7 @@ class SecondViewController: UIViewController, CountryDelegate, StatesDelegate {
     let titleLbl = UILabel()
     var selectedCountry: CountryType = .unitedStates
     var selectedState: StateType = .allRegions
-    var btn2Array:[String] = ["Brazil", "China", "France", "Germany", "Italy", "India", "Mexico", "Russia", "Spain", "United Kindom", "United States"]
+    var btn2Array:[String] = ["Brazil", "China", "France", "Germany", "India", "Italy", "Mexico", "Russia", "Spain", "United Kindom", "United States"]
     var btn3Array:[String] = ["All regions", "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"]
     var btn4Array:[String] = ["All Time", "1 week", "2 weeks", "30 days"]
     
@@ -66,7 +66,7 @@ class SecondViewController: UIViewController, CountryDelegate, StatesDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        var pieChart = CasesChart(statepicked: selectedState)
+        var pieChart = CasesChart(statepicked: selectedState, countrypicked: selectedCountry)
         view.backgroundColor = .white
         
         titleLbl.text = "Cases"
