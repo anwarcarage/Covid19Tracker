@@ -10,9 +10,9 @@ import Foundation
 import Alamofire
 
 protocol CasesDisplayable {
-    var casesTotal: Int { get }
+    var casesDate: Int { get }
+    var casesPositive: Int { get }
     var casesDeaths: Int { get }
-    var casesRecovered: Int { get }
 }
 
 

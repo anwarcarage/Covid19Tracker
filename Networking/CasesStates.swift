@@ -11,9 +11,9 @@ import Alamofire
 
 //MARK: - Welcome
 struct CaseStates: Decodable {
-    var positive: Int
-    var death: Int
-    var recovered: Int
+    var positive: Int?
+    var death: Int?
+    var recovered: Int?
     
     enum CodingKeys: String, CodingKey {
         case positive
@@ -23,13 +23,13 @@ struct CaseStates: Decodable {
 }
 
 extension CaseStates: StatesDisplayable {
-    var statesTotal: Int {
+    var statesTotal: Int? {
         positive
     }
-    var statesDeaths: Int {
+    var statesDeaths: Int? {
         death
     }
-    var statesRecovered: Int {
+    var statesRecovered: Int? {
         recovered
     }
 }

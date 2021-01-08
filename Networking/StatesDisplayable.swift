@@ -10,7 +10,7 @@ import Foundation
 import Alamofire
 
 protocol StatesDisplayable {
-    var statesTotal: Int { get }
-    var statesDeaths: Int { get }
-    var statesRecovered: Int { get }
+    var statesTotal: Int? { get }
+    var statesDeaths: Int? { get }
+    var statesRecovered: Int? { get }
 }

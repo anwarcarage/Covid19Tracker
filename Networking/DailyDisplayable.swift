@@ -12,4 +12,5 @@ import Alamofire
 protocol DailyDisplayable {
     var dailyConfirmed: Int { get }
     var dailyDate: String { get }
+    var dailyDeaths: Int { get }
 }

@@ -27,6 +27,7 @@ struct Timeline: Decodable {
     var active: Int?
     var recovered: Int?
     var newConfirmed: Int?
+    var newDeaths: Int?
     
     enum CodingKeys: String, CodingKey {
         case date
@@ -35,6 +36,7 @@ struct Timeline: Decodable {
         case active
         case recovered
         case newConfirmed = "new_confirmed"
+        case newDeaths = "new_deaths"
     }
 }
 
@@ -56,5 +58,8 @@ extension Timeline: CountriesDisplayable, DailyDisplayable {
     }
     var dailyDate: String {
         date
+    }
+    var dailyDeaths: Int {
+        newDeaths ?? 0
     }
 }

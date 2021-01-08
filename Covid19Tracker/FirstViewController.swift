@@ -16,7 +16,7 @@ class FirstViewController: UIViewController, NewCasesDelegate, CountryDelegate, 
     var selectedCountry: CountryType = .unitedStates
     var selectedState: StateType = .allRegions
     var selectedTime: TimeType = .allTime
-    var btn2Array:[String] = ["Brazil", "China", "France", "Germany", "Italy", "India", "Mexico", "Russia", "Spain", "United Kindom", "United States"]
+    var btn2Array:[String] = ["Brazil", "China", "France", "Germany", "India", "Italy", "Mexico", "Russia", "Spain", "United Kindom", "United States"]
     var btn3Array:[String] = ["All regions", "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"]
     var btn4Array:[String] = ["All Time", "1 week", "2 weeks", "30 days"]
     
@@ -86,7 +86,7 @@ class FirstViewController: UIViewController, NewCasesDelegate, CountryDelegate, 
         view.backgroundColor = .white
         let width = UIScreen.main.bounds.width - 16
          
-        var graph = DailyGraph(statepicked: selectedState, countrypicked: selectedCountry, timepicked: selectedTime)
+        var graph = DailyGraph(statepicked: selectedState, countrypicked: selectedCountry, timepicked: selectedTime, casepicked: selectedCase)
         
         titleLbl.text = "Daily Statistics"
         titleLbl.font = .systemFont(ofSize: 32)

@@ -18,7 +18,9 @@ class CasesChart: UIView, ChartViewDelegate {
     var incomingDeaths = Int()
     var incomingRecovered = Int()
     var incomingPositive = Int()
-    var stateData: StatesDisplayable?
+    var stateData: StatesDisplayable? = nil
+    var totalPicked: TotalType?
+    var incomingPopulation = String()
     var urlLink = String()
     
     func textStack(label1Input: String, label2Input: String) -> UIStackView {
@@ -50,14 +52,21 @@ class CasesChart: UIView, ChartViewDelegate {
         return chartView
     }()
     
-    init(statepicked: StateType, countrypicked: CountryType) {
+    init(statepicked: StateType, countrypicked: CountryType, totalpicked: TotalType, population: String) {
         super.init(frame: .zero)
             
         self.backgroundColor = .clear
         
+        //assigns which option is selected for the population button
+        totalPicked = totalpicked
+        incomingPopulation = population
+        
+        //determines which country has been selected and then sends the appropriate API call
         if countrypicked == .unitedStates {
+            //determines which state has been selected and then sends the appropriate API call
             switch statepicked {
             case .allRegions:
+                incomingPopulation = "328200000"
                 fetchCases(urlLink: "https://corona-api.com/countries/us")
             case .alabama:
                 fetchState(urlLink: "https://api.covidtracking.com/v1/states/al/current.json")
@@ -161,30 +170,79 @@ class CasesChart: UIView, ChartViewDelegate {
                 fetchState(urlLink: "https://api.covidtracking.com/v1/states/wy/current.json")
             }
         } else if countrypicked == .brazil {
+            incomingPopulation = "209500000"
             fetchCases(urlLink: "https://corona-api.com/countries/br")
         } else if countrypicked == .china {
+            incomingPopulation = "1393000000"
             fetchCases(urlLink: "https://corona-api.com/countries/cn")
         } else if countrypicked == .france {
+            incomingPopulation = "66990000"
             fetchCases(urlLink: "https://corona-api.com/countries/fr")
         } else if countrypicked == .germany {
+            incomingPopulation = "83020000"
             fetchCases(urlLink: "https://corona-api.com/countries/de")
         } else if countrypicked == .india {
+            incomingPopulation = "1353000000"
             fetchCases(urlLink: "https://corona-api.com/countries/in")
         } else if countrypicked == .italy {
+            incomingPopulation = "60360000"
             fetchCases(urlLink: "https://corona-api.com/countries/it")
         } else if countrypicked == .mexico {
+            incomingPopulation = "126200000"
             fetchCases(urlLink: "https://corona-api.com/countries/mx")
         } else if countrypicked == .russia {
+            incomingPopulation = "144500000"
             fetchCases(urlLink: "https://corona-api.com/countries/ru")
         } else if countrypicked == .spain {
+            incomingPopulation = "46940000"
             fetchCases(urlLink: "https://corona-api.com/countries/es")
         } else if countrypicked == .unitedKingdom {
+            incomingPopulation = "66650000"
             fetchCases(urlLink: "https://corona-api.com/countries/gb")
         }
     }
     
+    //adds error view to the UIView if the API returns null
+    func addErrorView() {
+        let width = UIScreen.main.bounds.width - 16
+        let errorLabel = UILabel()
+        
+        errorLabel.text = "Data currently unavailable for this state"
+        let errorContainer = UIView()
+        errorContainer.addSubview(errorLabel)
+        errorLabel.translatesAutoresizingMaskIntoConstraints = false
+        errorLabel.centerXAnchor.constraint(equalTo: errorContainer.centerXAnchor).isActive = true
+        errorLabel.centerYAnchor.constraint(equalTo: errorContainer.centerYAnchor).isActive = true
+        
+        self.addSubview(errorContainer)
+        errorContainer.translatesAutoresizingMaskIntoConstraints = false
+        errorContainer.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        errorContainer.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 0).isActive = true
+        errorContainer.heightAnchor.constraint(equalToConstant: width).isActive = true
+        errorContainer.widthAnchor.constraint(equalToConstant: width).isActive = true
+        
+        //creates footer labels using custom textStack() from above
+        let positiveStack = textStack(label1Input: "Positive", label2Input: "N/A")
+        let recoveredStack = textStack(label1Input: "Recovered", label2Input: "N/A")
+        let deathsStack = textStack(label1Input: "Deaths", label2Input: "N/A")
+
+        let footerStack = UIStackView(arrangedSubviews: [positiveStack, recoveredStack, deathsStack])
+        footerStack.axis = .horizontal
+        footerStack.distribution = .equalSpacing
+        let footerContainer = UIView()
+        footerContainer.addSubview(footerStack)
+        addViewConstraints(mainView: footerContainer, subView: footerStack, top: 8, left: 32, btm: -8, right: -32)
+
+        self.addSubview(footerContainer)
+        footerContainer.translatesAutoresizingMaskIntoConstraints = false
+        footerContainer.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        footerContainer.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor, constant: -8).isActive = true
+        footerContainer.heightAnchor.constraint(equalToConstant: 72).isActive = true
+        footerContainer.widthAnchor.constraint(equalToConstant: width).isActive = true
+    }
+    
     //adds the subviews to the UIView
-    func addViews() {
+    func addChartView() {
         let width = UIScreen.main.bounds.width - 16
         
         self.addSubview(pieChartView)
@@ -194,6 +252,7 @@ class CasesChart: UIView, ChartViewDelegate {
         pieChartView.heightAnchor.constraint(equalToConstant: width).isActive = true
         pieChartView.widthAnchor.constraint(equalToConstant: width).isActive = true
         
+        //creates footer labels using custom textStack() from above
         let positiveStack = textStack(label1Input: "Positive", label2Input: addCommas(total: incomingPositive))
         let recoveredStack = textStack(label1Input: "Recovered", label2Input: addCommas(total: incomingRecovered))
         let deathsStack = textStack(label1Input: "Deaths", label2Input: addCommas(total: incomingDeaths))
@@ -232,6 +291,7 @@ class CasesChart: UIView, ChartViewDelegate {
         pieChartView.centerText = "Total Cases: " + addCommas(total: incomingTotal)
         pieChartView.usePercentValuesEnabled = true
         pieChartView.legend.enabled = false
+        pieChartView.rotationEnabled = false
         
         let formatter = NumberFormatter()
         formatter.maximumFractionDigits = 1
@@ -248,40 +308,85 @@ class CasesChart: UIView, ChartViewDelegate {
 extension CasesChart {
     //api call for all regions in the United States
     func fetchCases(urlLink: String) {
-        
+                
         let request = AF.request(urlLink)
         
         request.responseDecodable(of:CaseCountries.self) { (response) in
             guard let casesCountry = response.value else { return }
             self.countryData = casesCountry.data.timeline[0]
+            
             self.incomingTotal = self.countryData?.countryTotal ?? 0
             self.incomingDeaths = self.countryData?.countryDeaths ?? 0
             self.incomingRecovered = self.countryData?.countryRecovered ?? 0
             self.incomingPositive = self.countryData?.countryActive ?? 0
+            
+            if self.totalPicked == .per1k {
+                let quotient: Int = ((self.incomingPopulation as NSString).integerValue)/1000
+                
+                self.incomingTotal = self.incomingTotal/quotient
+                self.incomingDeaths = self.incomingDeaths/quotient
+                self.incomingRecovered = self.incomingRecovered/quotient
+                self.incomingPositive = self.incomingPositive/quotient
+            }
+
             self.setData(positive: self.incomingPositive, deaths: self.incomingDeaths, recovered: self.incomingRecovered)
-            self.addViews()
+            self.addChartView()
             self.setNeedsDisplay()
         }
     }
     
     //api call for specific states in the United States
     func fetchState(urlLink: String) {
-        
+ 
         let request = AF.request(urlLink)
         
         request.responseDecodable(of: CaseStates.self) { (response) in
             guard let casesState = response.value else { return }
             self.stateData = casesState
-            self.incomingTotal = self.stateData?.statesTotal ?? 0
-            self.incomingDeaths = self.stateData?.statesDeaths ?? 0
-            self.incomingRecovered = self.stateData?.statesRecovered ?? 0
-            self.incomingPositive = self.findPositives()
-            self.setData(positive: self.incomingPositive, deaths: self.incomingDeaths, recovered: self.incomingRecovered)
-            self.addViews()
+            var errorHandle = Bool()
+            
+            //displays error message if the API returns null
+            if let total = self.stateData?.statesTotal {
+                self.incomingTotal = total
+            } else {
+                errorHandle = true
+            }
+            
+            //displays error message if the API returns null
+            if let deaths = self.stateData?.statesDeaths {
+                self.incomingDeaths = deaths
+            } else {
+                errorHandle = true
+            }
+            
+            //displays error message if the API returns null
+            if let recovered = self.stateData?.statesRecovered {
+                self.incomingRecovered = recovered
+            } else {
+                errorHandle = true
+            }
+            
+            //handles population button selection
+            if errorHandle == false {
+                if self.totalPicked == .per1k {
+                    let quotient: Int = ((self.incomingPopulation as NSString).integerValue)/1000
+                    
+                    self.incomingTotal = self.incomingTotal/quotient
+                    self.incomingDeaths = self.incomingDeaths/quotient
+                    self.incomingRecovered = self.incomingRecovered/quotient
+                }
+                
+                self.incomingPositive = self.findPositives()
+                self.setData(positive: self.incomingPositive, deaths: self.incomingDeaths, recovered: self.incomingRecovered)
+                self.addChartView()
+            } else {
+                self.addErrorView()
+            }
+            
             self.setNeedsDisplay()
         }
     }
-    
+
     //finds positive cases by subtracting deaths and recoveries from total cases
     func findPositives() -> Int {
         var positives = Int()

@@ -7,20 +7,31 @@
 //
 
 import UIKit
+import Alamofire
 
-class SecondViewController: UIViewController, CountryDelegate, StatesDelegate {
+class SecondViewController: UIViewController, CountryDelegate, StatesDelegate, TotalDelegate {
     
     let titleLbl = UILabel()
     var selectedCountry: CountryType = .unitedStates
     var selectedState: StateType = .allRegions
-    var btn2Array:[String] = ["Brazil", "China", "France", "Germany", "India", "Italy", "Mexico", "Russia", "Spain", "United Kindom", "United States"]
-    var btn3Array:[String] = ["All regions", "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"]
-    var btn4Array:[String] = ["All Time", "1 week", "2 weeks", "30 days"]
+    var selectedTotal: TotalType = .total
+    var allData: [[String]] = []
+    var population = String()
+    var stateName = String()
+    var btn2Array: [String] = ["Brazil", "China", "France", "Germany", "India", "Italy", "Mexico", "Russia", "Spain", "United Kindom", "United States"]
+    var btn3Array: [String] = ["All regions", "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado", "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho", "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine", "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi", "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey", "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma", "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota", "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia", "Wisconsin", "Wyoming"]
+    var btn4Array: [String] = ["All Time", "1 week", "2 weeks", "30 days"]
+    
+    func changeTotal(newTotal: TotalType) {
+        selectedTotal = newTotal
+        
+        self.viewDidLoad()
+    }
     
     //handles country delegate
     func changeCountry(newCountry: CountryType) {
         selectedCountry = newCountry
-        
+
         self.viewDidLoad()
     }
     
@@ -66,7 +77,21 @@ class SecondViewController: UIViewController, CountryDelegate, StatesDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        var pieChart = CasesChart(statepicked: selectedState, countrypicked: selectedCountry)
+        //provides the name of the state selected and assigns it to variable stateName. Utilizes btn3Array from SecondViewController
+        //and the rawValue of statetype from StatesAlert
+        for (index, name) in btn3Array.enumerated() {
+            if selectedState.rawValue == index {
+                stateName = name
+            }
+        }
+        
+        //calls census.gov for population numbers
+        fetchPopulation()
+    }
+    
+    func addView() {
+        var pieChart = CasesChart(statepicked: selectedState, countrypicked: selectedCountry, totalpicked: selectedTotal, population: population)
+        
         view.backgroundColor = .white
         
         titleLbl.text = "Cases"
@@ -79,7 +104,8 @@ class SecondViewController: UIViewController, CountryDelegate, StatesDelegate {
         divider.backgroundColor = .lightGray
         addViewConstraints(mainView: dividerContainer, subView: divider, top: 0, left: 0, btm: 0, right: 0)
 
-        let firstBtn = makeButton(title: "Total")
+        let firstBtn = makeButton(title: updateBtn1Title())
+        firstBtn.addTarget(self, action: #selector(firstAlert), for: .touchUpInside)
         let secondBtn = makeButton(title: updateBtn2Title())
         secondBtn.addTarget(self, action: #selector(secondAlert), for: .touchUpInside)
         let thirdBtn = makeButton(title: updateBtn3Title())
@@ -147,6 +173,15 @@ class SecondViewController: UIViewController, CountryDelegate, StatesDelegate {
     }
     
     //updates button title
+    func updateBtn1Title() -> String {
+        var newTitle = String()
+        
+        newTitle = selectedTotal == .total ? "Total" : "per 1k People"
+        
+        return newTitle
+    }
+    
+    //updates button title
     func updateBtn2Title() -> String {
         var country = String()
         
@@ -170,6 +205,14 @@ class SecondViewController: UIViewController, CountryDelegate, StatesDelegate {
         return state
     }
     
+    //first button loads the TotalAlert UIVIew & identifies delegate
+    @objc func firstAlert() {
+        let firstAlert = TotalAlert(totaltype: selectedTotal)
+        firstAlert.delegate = self
+        view.addSubview(firstAlert)
+        addViewConstraints(mainView: view, subView: firstAlert, top: 0, left: 0, btm: 0, right: 0)
+    }
+    
     //second button loads the CountryAlert UIView & identifies delegate
     @objc func secondAlert() {
         let secondAlert = CountryAlert(countrytype: selectedCountry)
@@ -187,3 +230,22 @@ class SecondViewController: UIViewController, CountryDelegate, StatesDelegate {
     }
 }
 
+extension SecondViewController {
+    //api call for individual state's population
+    func fetchPopulation() {
+        let request = AF.request("https://api.census.gov/data/2019/pep/population?get=POP,NAME,STATE&for=state:*&key=4eff9ac72c73ddce473345aafe94dbc473d983d7")
+        
+        request.responseDecodable(of: [[String]].self) { (response) in
+            guard let statePop = response.value else { return }
+            self.allData = statePop
+            
+            for data in self.allData {
+                if data[1] == self.stateName {
+                    self.population = data[0]
+                }
+            }
+            
+            self.addView()
+        }
+    }
+}

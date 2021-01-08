@@ -11,25 +11,25 @@ import Alamofire
 
 //MARK: - Welcome
 struct Cases: Decodable {
-    var positive: Int?
-    var death: Int?
-    var recovered: Int?
+    var date: Int?
+    var positiveIncrease: Int?
+    var deathIncrease: Int?
     
     enum CodingKeys: String, CodingKey {
-        case positive
-        case death
-        case recovered
+        case date
+        case positiveIncrease
+        case deathIncrease
     }
 }
 
 extension Cases: CasesDisplayable {
-    var casesTotal: Int {
-        positive ?? 0
+    var casesDate: Int {
+        date ?? 0
+    }
+    var casesPositive: Int {
+        positiveIncrease ?? 0
     }
     var casesDeaths: Int {
-        death ?? 0
-    }
-    var casesRecovered: Int {
-        recovered ?? 0
+        deathIncrease ?? 0
     }
 }
