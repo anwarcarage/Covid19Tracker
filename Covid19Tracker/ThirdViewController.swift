@@ -30,7 +30,7 @@ class ThirdViewController: UIViewController {
             view.backgroundColor = .lightGray
                         
             let width = UIScreen.main.bounds.width - 16
-            let height = CGFloat(180)
+            let height = CGFloat(width * 1.5)
 
             let flowLayout = UICollectionViewFlowLayout()
             flowLayout.itemSize = CGSize(width: width, height: height)
@@ -44,7 +44,7 @@ class ThirdViewController: UIViewController {
             collectionView.dataSource = self
             collectionView.delegate = self
 
-            // everyone forgets this
+            //don't forget this!!!
             collectionView.register(NewsCell.self, forCellWithReuseIdentifier: "newsCell")
 
             view.addSubview(collectionView)
@@ -70,7 +70,8 @@ extension ThirdViewController: UICollectionViewDataSource, UICollectionViewDeleg
                 newsTitle: news.newsTitle,
                 newsBody: news.newsBody,
                 newsUrlLink: news.newsUrlLink,
-                newsSource: news.newsSource
+                newsSource: news.newsSource,
+                newsImg: news.newsMedia[0].imgUrl
         )
         
         return cell ?? UICollectionViewCell()
@@ -92,6 +93,8 @@ extension ThirdViewController {
 
 class NewsCell: UICollectionViewCell {
     
+    let width = UIScreen.main.bounds.width - 16
+    
     func addViewConstraints(mainView: UIView, subView: UIView, top: CGFloat, left: CGFloat, btm: CGFloat, right: CGFloat) {
         subView.translatesAutoresizingMaskIntoConstraints = false
         subView.topAnchor.constraint(equalTo: mainView.safeAreaLayoutGuide.topAnchor, constant: top).isActive = true
@@ -100,10 +103,25 @@ class NewsCell: UICollectionViewCell {
         subView.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: right).isActive = true
     }
     
+    func setImage(from url: String) {
+        guard let imageURL = URL(string: url) else { return }
+        
+        DispatchQueue.global().async {
+            guard let imageData = try? Data(contentsOf: imageURL) else { return }
+            
+            let image = UIImage(data: imageData)
+            DispatchQueue.main.async {
+                self.cellImage.image = image
+            }
+        }
+    }
+    
     let cellTitle = UILabel()
     let cellBody = UILabel()
     var cellLink = String()
     let cellSource = UILabel()
+    let cellImage = UIImageView()
+    let clickableText = UILabel()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -114,19 +132,40 @@ class NewsCell: UICollectionViewCell {
         cellBody.font = UIFont(name: "Baskerville", size: 12)
         cellBody.lineBreakMode = .byWordWrapping
         cellBody.numberOfLines = 0
-        let titlestack = UIStackView(arrangedSubviews: [cellTitle, cellBody])
-        titlestack.axis = .vertical
-        titlestack.spacing = 4
-
         cellSource.font = UIFont(name: "Arial", size: 8)
-        cellSource.textAlignment = .right
-        let footerStack = UIStackView(arrangedSubviews: [UIView(), cellSource])
+        clickableText.font = UIFont(name: "Arial", size: 8)
+        clickableText.textColor = .blue
+        cellImage.layer.masksToBounds = true
+        cellImage.layer.cornerRadius = 12
+        cellImage.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         
-        let mainStack = UIStackView(arrangedSubviews: [titlestack, UIView(), footerStack])
+        clickableText.isUserInteractionEnabled = true
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(labelClicked))
+        clickableText.addGestureRecognizer(gestureRecognizer)
+        
+        let footerStack = UIStackView(arrangedSubviews: [clickableText, UIView(), cellSource])
+        footerStack.axis = .horizontal
+        
+        let cellContainer = UIView()
+        cellContainer.heightAnchor.constraint(equalToConstant: width).isActive = true
+        cellContainer.addSubview(cellImage)
+        addViewConstraints(mainView: cellContainer, subView: cellImage, top: 0, left: 0, btm: 0, right: 0)
+        
+        let textStack = UIStackView(arrangedSubviews: [cellTitle, cellBody, UIView(), footerStack])
+        textStack.axis = .vertical
+        textStack.spacing = 8
+        let textBodyContainer = UIView()
+        textBodyContainer.addSubview(textStack)
+        addViewConstraints(mainView: textBodyContainer, subView: textStack, top: 0, left: 8, btm: 0, right: -8)
+        
+        let mainStack = UIStackView(arrangedSubviews: [cellContainer, textBodyContainer])
         mainStack.axis = .vertical
         mainStack.spacing = 8
+        let mainContainer = UIView()
+        mainContainer.addSubview(mainStack)
+        addViewConstraints(mainView: mainContainer, subView: mainStack, top: 0, left: 0, btm: -8, right: 0)
     
-        contentView.addSubview(mainStack)
+        contentView.addSubview(mainContainer)
         contentView.backgroundColor = .white
         contentView.layer.cornerRadius = 12
         contentView.layer.borderColor = UIColor.black.cgColor
@@ -136,18 +175,26 @@ class NewsCell: UICollectionViewCell {
         contentView.layer.shadowRadius = 2
         contentView.layer.shadowOpacity = 1
         
-        addViewConstraints(mainView: contentView, subView: mainStack, top: 8, left: 8, btm: -8, right: -8)
-        
+        addViewConstraints(mainView: contentView, subView: mainContainer, top: 0, left: 0, btm: 0, right: 0)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func update(newsTitle: String, newsBody: String, newsUrlLink: String, newsSource: String) {
-        cellTitle.text = String(newsTitle)
-        cellBody.text = String(newsBody)
-        cellLink = String(newsUrlLink)
-        cellSource.text = String("source: " + newsSource)
+    func update(newsTitle: String, newsBody: String, newsUrlLink: String, newsSource: String, newsImg: String) {
+        cellTitle.text = newsTitle
+        cellBody.text = newsBody
+        cellLink = newsUrlLink
+        cellSource.text = "source: " + newsSource
+        setImage(from: "https://www.nytimes.com/" + newsImg)
+        clickableText.text = "Read Article"
    }
+    
+    @objc func labelClicked() {
+        if let url = URL(string: cellLink) {
+            UIApplication.shared.open(url)
+        }
+    }
 }
+

@@ -14,4 +14,10 @@ protocol Displayable {
     var newsBody : String { get }
     var newsUrlLink : String { get }
     var newsSource : String { get }
+    var newsMedia: [Multimedia] { get }
+}
+
+protocol ImgDisplayable {
+    var imgSubtype: String { get }
+    var imgUrl: String { get }
 }

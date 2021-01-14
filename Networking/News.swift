@@ -28,6 +28,7 @@ struct Doc: Decodable {
     var snippet: String
     var leadParagraph: String
     var source: String
+    var multimedia: [Multimedia]
     
     enum CodingKeys: String, CodingKey {
         case abstract
@@ -35,6 +36,18 @@ struct Doc: Decodable {
         case snippet
         case leadParagraph = "lead_paragraph"
         case source
+        case multimedia
+    }
+}
+
+//MARK: - Multimedia
+struct Multimedia: Decodable {
+    var subtype: String
+    var url: String
+    
+    enum CodingKeys: String, CodingKey {
+        case subtype
+        case url
     }
 }
 
@@ -53,6 +66,18 @@ extension Doc: Displayable {
     
     var newsSource: String {
         source
+    }
+    var newsMedia: [Multimedia] {
+        multimedia
+    }
+}
+
+extension Multimedia: ImgDisplayable {
+    var imgSubtype: String {
+        subtype
+    }
+    var imgUrl: String {
+        url
     }
 }
 
